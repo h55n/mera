@@ -80,7 +80,10 @@ Serve this JSON from `https://account.example.com/.well-known/assetlinks.json`:
 ```json
 [
   {
-    "relation": ["delegate_permission/common.get_login_creds"],
+    "relation": [
+      "delegate_permission/common.get_login_creds",
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.example.app",
@@ -89,6 +92,8 @@ Serve this JSON from `https://account.example.com/.well-known/assetlinks.json`:
   }
 ]
 ```
+
+Google Play services does not yet accept `get_login_creds` alone when it checks the relying party ID, so passkey creation fails with "RP ID cannot be validated" unless the file also lists `handle_all_urls`. Google's Digital Asset Links API caches its answer for an hour, so a change to the file can take that long to apply.
 
 Replace the package name and fingerprint with those of the Android app. Include every certificate used to sign the app. For a local build, print the debug certificate with:
 
